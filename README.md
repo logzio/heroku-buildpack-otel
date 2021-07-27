@@ -13,7 +13,7 @@ You can use this buildpack for other observability platform (which support otel 
 ## Installation
 From your heroku git directory download [this config.yaml](https://raw.githubusercontent.com/logzio/heroku-buildpack-otel/master/config.yaml).
 
-    wget -O telegraf.conf https://raw.githubusercontent.com/logzio/heroku-buildpack-otel/master/config.yaml
+    wget -O otel_conf.yaml https://raw.githubusercontent.com/logzio/heroku-buildpack-otel/master/config.yaml
 
 ## Enable enviroment variable
 
