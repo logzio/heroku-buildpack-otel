@@ -19,48 +19,47 @@ echo "ENV_DIR ${ENV_DIR}"
 echo "WORKING_DIR ${WORKING_DIR}"
 
 # Export user env variable to use in the file
-for KEY in TELEGRAF_CONF; do
+for KEY in OTEL_CONF; do
   [ -f $ENV_DIR/$KEY ] && export "$KEY=$(cat $ENV_DIR/$KEY)"
 done
 
-if [ $TELEGRAF_CONF ]; then TELEGRAF_CONF=$HOME/$TELEGRAF_CONF; fi
-TELEGRAF_CONF=${TELEGRAF_CONF-$HOME/telegraf.conf}
-TELEGRAF_VERSION=1.19.0
-TELEGRAF_FILENAME=telegraf-${TELEGRAF_VERSION}_linux_amd64.tar.gz
-TELEGRAF_URL=https://dl.influxdata.com/telegraf/releases/${TELEGRAF_FILENAME}
+if [ $OTEL_CONF ]; then TELEGRAF_CONF=$HOME/$OTEL_CONF; fi
+OTEL_CONF=${OTEL_CONF-$HOME/OTEL.conf}
+OTEL_VERSION=v0.23.0
+OTEL_FILENAME=otelcontribcol_linux_amd64
+OTEL_URL=https://github.com/open-telemetry/opentelemetry-collector-contrib/releases/download/${OTEL_VERSION}/${OTEL_FILENAME}
 
-echo "Installing Telegraf ${TELEGRAF_VERSION}" | arrow
+
+echo "Installing OTEL ${OTEL_VERSION}" | arrow
 
 if [ ! -d $CACHE_DIR ]; then
     mkdir -p $CACHE_DIR
 fi
 
-if [ ! -f $CACHE_DIR/$TELEGRAF_FILENAME ]; then
-    echo "Downloading telegraf from ${TELEGRAF_URL}" | indent
-    curl -sLf -o $CACHE_DIR/$TELEGRAF_FILENAME $TELEGRAF_URL
+if [ ! -f $CACHE_DIR/$OTEL_FILENAME ]; then
+    echo "Downloading OTEL from ${OTEL_URL}" | indent
+    curl -sLf -o $CACHE_DIR/$OTEL_FILENAME $OTEL_URL
 fi
 
-echo "Extracting ${TELEGRAF_FILENAME}" | indent
-tar -C $CACHE_DIR -zxf $CACHE_DIR/$TELEGRAF_FILENAME
 
 # Copy the telegraf binary to the build dir
 mkdir -p $BUILD_DIR/bin
-cp $CACHE_DIR/telegraf-$TELEGRAF_VERSION/usr/bin/telegraf $BUILD_DIR/bin/telegraf
+cp $CACHE_DIR/$OTEL_FILENAME $BUILD_DIR/bin/$OTEL_FILENAME
 
 if [ ! -d $BUILD_DIR/.profile.d ]; then
     mkdir -p "$BUILD_DIR/.profile.d"
 fi
 
-cat > $BUILD_DIR/.profile.d/001-heroku-buildpack-telegraf.sh << EOF
+cat > $BUILD_DIR/.profile.d/001-heroku-buildpack-otel.sh << EOF
 #!/bin/sh
 
-pidfile=/tmp/telegraf.pid
+pidfile=/tmp/otel.pid
 
 # Start Telegraf from the \$HOME/bin directory with the configuration in /app/telegraf.conf (by default), redirect STDIN to /dev/null (but STDERR should still come through the logs)
-/sbin/start-stop-daemon --start --quiet --pidfile \$pidfile --exec $HOME/bin/telegraf -- -pidfile \$pidfile -config $TELEGRAF_CONF -quiet >/dev/null &
+/sbin/start-stop-daemon --start --quiet --pidfile \$pidfile --exec $HOME/bin/$OTEL_FILENAME -- -pidfile \$pidfile -config $OTEL_CONF -quiet >/dev/null &
 
 EOF
 
-chmod +x $BUILD_DIR/.profile.d/001-heroku-buildpack-telegraf.sh
+chmod +x $BUILD_DIR/.profile.d/001-heroku-buildpack-otel.sh
 
 
