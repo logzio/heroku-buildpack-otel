@@ -6,7 +6,7 @@ Based on [Skrud work](https://github.com/skrud/heroku-buildpack-telegraf)
 
 A simple heroku buildpack to download, deploy and launch Open Telemetry on your dynos.
 
-This buildpack downloads the latest Otel release (at the time of writing, 1.19.0), extracts it on your dyno and starts it via a .profile.d script.
+This buildpack downloads the latest Otel release (at the time of writing, v0.23.0), extracts it on your dyno and starts it via a .profile.d script.
 
 You can use this buildpack for other observability platform (which support otel agent), just change the exporter in the config.
 
