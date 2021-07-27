@@ -24,7 +24,7 @@ for KEY in OTEL_CONF; do
 done
 
 if [ $OTEL_CONF ]; then TELEGRAF_CONF=$HOME/$OTEL_CONF; fi
-OTEL_CONF=${OTEL_CONF-$HOME/OTEL.conf}
+OTEL_CONF=${OTEL_CONF-$HOME/otel_conf.yaml}
 OTEL_VERSION=v0.23.0
 OTEL_FILENAME=otelcontribcol_linux_amd64
 OTEL_URL=https://github.com/open-telemetry/opentelemetry-collector-contrib/releases/download/${OTEL_VERSION}/${OTEL_FILENAME}
