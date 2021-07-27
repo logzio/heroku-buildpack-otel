@@ -29,9 +29,9 @@ and run the following commands inside your heroku app directory:
 
     heroku labs:enable runtime-dyno-metadata -a <<HEROKU_APP_NAME>>
     
-    heroku config:set LOGZIO_LISTENER=https://<<LOGZIO_LISTENER>>:8053   
+<!--    heroku config:set LOGZIO_REGION=https://<<LOGZIO_LISTENER>>:8053   -->
     
-    heroku config:set LOGZIO_TOKEN=<<LOGZIO_TRACING_TOKEN>>
+    heroku config:set LOGZIO_TRACING_TOKEN=<<LOGZIO_TRACING_TOKEN>>
     
     git add .
     
