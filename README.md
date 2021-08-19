@@ -1,4 +1,4 @@
-# UNDER WIP - dont use
+# This is Work in Progress - do not use
 
 # heroku-buildpack-otel
 
